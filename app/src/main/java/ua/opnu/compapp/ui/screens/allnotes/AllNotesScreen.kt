@@ -2,7 +2,6 @@ package ua.opnu.compapp.ui.screens.allnotes
 
 import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -29,11 +28,10 @@ import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.snapshots.SnapshotStateList
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -51,10 +49,11 @@ import ua.opnu.compapp.ui.theme.AppTypography
 fun AllNotesScreen(
     navController: NavController,
     snackBarHostState: SnackbarHostState,
-    scope: CoroutineScope
+    scope: CoroutineScope,
+    viewModel: AllNotesViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
 ) {
 
-    val list = remember { MyApp.data }
+    val list by viewModel.notes.collectAsState(initial = emptyList())
 
     if (list.isEmpty()) {
         EmptyList()
@@ -67,7 +66,7 @@ fun AllNotesScreen(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun NotesList(
-    list: SnapshotStateList<Note>,
+    list: List<Note>,
     navController: NavController,
     snackBarHostState: SnackbarHostState,
     scope: CoroutineScope
@@ -136,7 +135,7 @@ fun ListItem(
                     .weight(1f),
                 textAlign = TextAlign.Start,
             )
-            IconButton(onClick = { MyApp.instance.changeFavorite(note) }) {
+            IconButton(onClick = { /* TODO: implement change favorite */ }) {
                 val vector =
                     if (note.isFavorite) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder
                 Icon(imageVector = vector, contentDescription = null)
@@ -149,7 +148,7 @@ fun ListItem(
             }
             IconButton(onClick = {
 
-                MyApp.instance.deleteNote(note)
+                //TODO: implement deletion
 
                 scope.launch {
                     val snackBarResult = snackBarHostState.showSnackbar(
@@ -159,7 +158,7 @@ fun ListItem(
                     )
                     when (snackBarResult) {
                         SnackbarResult.ActionPerformed -> {
-                            MyApp.instance.undoDeletion()
+                            //TODO: implement deletion
                         }
 
                         else -> {
@@ -170,8 +169,6 @@ fun ListItem(
             }) {
                 Icon(imageVector = Icons.Default.Delete, contentDescription = null)
             }
-
         }
-
     }
 }

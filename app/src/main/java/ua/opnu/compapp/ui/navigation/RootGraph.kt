@@ -84,7 +84,7 @@ fun RootGraph(navController: NavHostController = rememberNavController()) {
                 route = "${Graph.EDIT_NOTE}/{id}",
                 arguments = listOf(navArgument("id") { type = NavType.LongType })
             ) { entry ->
-                EditNoteScreen(id = entry.arguments?.getLong("id") ?: -1)
+                EditNoteScreen(id = entry.arguments?.getLong("id") ?: -1, navController)
             }
         }
     }

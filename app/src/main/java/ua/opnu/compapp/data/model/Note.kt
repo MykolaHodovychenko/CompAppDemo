@@ -1,10 +1,15 @@
 package ua.opnu.compapp.data.model
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import java.time.LocalDateTime
 import java.util.Date
 
+@Entity(tableName = "notes")
 data class Note(
-    val id: Long,
+
+    @PrimaryKey(autoGenerate = true)
+    val id: Long = 0L,
     val title: String,
     val contents: String,
     val isFavorite: Boolean,
